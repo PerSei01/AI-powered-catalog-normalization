@@ -80,7 +80,7 @@ POST /suppliers
 Clone the repository:
 
 
-git clone https://github.com/YOUR\_USERNAME/catalog-ai.git
+git clone https://github.com/PerSei01/AI-powered-catalog-normalization.git
 
 
 Go to backend folder:
