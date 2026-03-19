@@ -2,23 +2,23 @@
 
 Backend system for product catalog normalization and deduplication.
 
-This project simulates a real-world backend system that processes messy supplier product catalogs and prepares them for further normalization and matching.
+This project simulates a real-world backend system that processes inconsistent supplier product data and prepares it for normalization and matching.
 
-The goal is to eventually build an AI-assisted system that can detect duplicate products coming from different suppliers.
+The long-term goal is to build an AI-assisted system capable of detecting duplicate products across multiple suppliers.
 
 ---
 
-## Learning Purpose
+## Project Purpose
 
-This project is being developed as a **learning and portfolio project** while studying:
+This is a **learning + portfolio project** focused on backend development and real-world data problems.
 
-- backend development with FastAPI
-- database design with SQLAlchemy
-- REST API architecture
-- product catalog data processing
-- AI-assisted catalog matching (planned)
+The project is built step-by-step while learning:
 
-The project is being built step-by-step while learning new backend concepts.
+- FastAPI (REST API development)
+- SQLAlchemy (ORM and database interaction)
+- database design
+- data normalization workflows
+- AI-assisted product matching (planned)
 
 ---
 
@@ -29,17 +29,21 @@ Supplier product catalogs are often inconsistent.
 Example:
 
 Supplier A  
-Nike Air Max 90 Black 42
+Nike Air Max 90 Black 42  
 
 Supplier B  
-Nike AirMax 90 Men's Black Size 42
+Nike AirMax 90 Men's Black Size 42  
 
 Supplier C  
-Air Max 90 Nike Black EU42
+Air Max 90 Nike Black EU42  
 
-All of these refer to the **same product**, but appear as different entries in a catalog.
+All of these refer to the same product, but appear as separate entries.
 
-The goal of this project is to build tools that help normalize and match such products automatically.
+This project aims to build a system that can:
+
+- standardize product data
+- extract attributes
+- detect duplicates across suppliers
 
 ---
 
@@ -60,18 +64,41 @@ Tools:
 
 ---
 
+## Architecture Direction
+
+The project is being developed backend-first, with a planned transition into a full-stack application.
+
+Planned frontend:
+
+- React
+- TypeScript
+
+The frontend will be used for:
+
+- managing supplier data
+- visualizing normalized products
+- reviewing duplicate matches
+
 ## Current Features
 
 - FastAPI backend
-- Supplier API
 - SQLite database
 - SQLAlchemy ORM
-- CRUD operations for suppliers
+- Supplier entity
+- Full CRUD API for suppliers
+- Request validation with Pydantic
 
-Endpoints:
+---
 
-GET /suppliers  
-POST /suppliers
+## API Endpoints
+
+Suppliers:
+
+- GET /suppliers → get all suppliers  
+- GET /suppliers/{id} → get supplier by id  
+- POST /suppliers → create supplier  
+- PUT /suppliers/{id} → update supplier  
+- DELETE /suppliers/{id} → delete supplier  
 
 ---
 
@@ -86,7 +113,7 @@ git clone https://github.com/PerSei01/AI-powered-catalog-normalization.git
 Go to backend folder:
 
 
-cd catalog-ai/backend
+cd backend
 
 
 Create virtual environment:
@@ -121,13 +148,37 @@ http://127.0.0.1:8000/docs
 
 ---
 
+## Project Structure (current)
+
+
+backend/
+├── main.py
+├── database.py
+├── models.py
+└── ...
+
+
+(Structure will be expanded as the project grows)
+
+---
+
 ## Planned Features
 
-Future steps for the project:
+Next steps:
 
-- product feed ingestion
-- product catalog normalization
-- product attribute extraction
+- product entity and catalog ingestion
+- product normalization logic
+- attribute extraction (brand, model, size, etc.)
 - duplicate detection
-- embedding-based product matching
-- AI-assisted catalog processing
+- embeddings for product similarity
+- AI-assisted matching system
+
+---
+
+## Notes
+
+This project is being developed incrementally with focus on:
+
+- understanding backend fundamentals
+- building production-like structure
+- writing clean and predictable API logic
