@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
 from database import engine, get_db
-from models import Base, Supplier, SupplierUpdate
+from models import Base, Supplier
+from schemas import SupplierResponse, SupplierCreate, SupplierUpdate, SupplierPatch
 from sqlalchemy.orm import Session
 
 Base.metadata.create_all(bind=engine)
@@ -25,12 +26,12 @@ def read_root():
 def health_check():
     return {"status": "ok"}
 
-@app.get("/suppliers")
+@app.get("/suppliers", response_model=list[SupplierResponse])
 def get_suppliers(db: Session = Depends(get_db)):
     suppliers = db.query(Supplier).all()
     return suppliers
 
-@app.post("/suppliers")
+@app.post("/suppliers", response_model=SupplierResponse)
 def create_supplier(supplier_data: SupplierCreate, db: Session = Depends(get_db)):
 
     supplier = Supplier(
@@ -44,7 +45,7 @@ def create_supplier(supplier_data: SupplierCreate, db: Session = Depends(get_db)
 
     return supplier
 
-@app.get("/suppliers/{supplier_id}")
+@app.get("/suppliers/{supplier_id}", response_model=SupplierResponse)
 def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
     
     supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
@@ -67,7 +68,7 @@ def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
 
     return {"message": "Supplier deleted successfully"}
 
-@app.put("/suppliers/{supplier_id}")
+@app.put("/suppliers/{supplier_id}", response_model=SupplierResponse)
 def update_supplier(supplier_id: int, supplier_data: SupplierUpdate, db: Session = Depends(get_db)):
 
     supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
@@ -77,6 +78,28 @@ def update_supplier(supplier_id: int, supplier_data: SupplierUpdate, db: Session
 
     supplier.name = supplier_data.name
     supplier.priority = supplier_data.priority
+
+    db.commit()
+    db.refresh(supplier)
+
+    return supplier
+
+@app.patch("/suppliers/{supplier_id}", response_model=SupplierResponse)
+def patch_supplier(
+    supplier_id: int,
+    supplier_data: SupplierPatch,
+    db: Session = Depends(get_db)
+):
+    supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
+
+    if supplier is None:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+
+    if supplier_data.name is not None:
+        supplier.name = supplier_data.name
+
+    if supplier_data.priority is not None:
+        supplier.priority = supplier_data.priority
 
     db.commit()
     db.refresh(supplier)
